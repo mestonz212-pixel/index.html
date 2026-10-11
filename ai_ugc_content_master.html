@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111827">
+<title>AI UGC Content Master</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;font-family:system-ui,Arial,sans-serif;background:#0b1120;color:#f1f5f9}header{padding:22px 16px;background:#111827;border-bottom:1px solid #334155}h1{font-size:23px;margin:0 0 8px;color:#67e8f9}header p{margin:0;color:#cbd5e1;font-size:13px}main{max-width:760px;margin:auto;padding:16px}label{display:block;margin:15px 0 7px;font-size:14px}select,input,textarea{width:100%;padding:12px;border-radius:9px;border:1px solid #475569;background:#1e293b;color:white;font-size:15px}textarea{min-height:95px;resize:vertical}.card{background:#111827;border:1px solid #334155;border-radius:13px;padding:16px;margin-bottom:15px}button{border:0;border-radius:9px;padding:12px 15px;background:#0891b2;color:white;font-weight:700;font-size:14px;cursor:pointer}.secondary{background:#334155}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}#hasil{min-height:250px;white-space:pre-wrap;overflow-wrap:anywhere}.note{font-size:12px;color:#94a3b8;line-height:1.5}footer{text-align:center;padding:25px;color:#94a3b8;font-size:12px}
+</style>
+</head>
+<body>
+<header><h1>AI UGC CONTENT MASTER</h1><p>Satu tempat untuk menyusun prompt konten AI</p></header>
+<main>
+<div class="card">
+<label for="jenis">Jenis konten</label>
+<select id="jenis">
+<option>DNA Character</option><option>Prompt Gambar</option><option>Prompt Video</option><option>Cerita Bersambung</option><option>Podcast</option><option>Drama Pendek</option><option>Komedi Jawa Wonosobo</option><option>Promosi Produk UGC</option><option>Joget dan Tarian</option><option>Edit Foto</option>
+</select>
+<label for="tokoh">Nama/deskripsi karakter</label><input id="tokoh" placeholder="Contoh: Meston, pria memakai hoodie hitam">
+<label for="referensi">Ciri foto referensi</label><textarea id="referensi" placeholder="Wajah, rambut, bentuk tubuh, pakaian, dan ciri khas. Gunakan foto referensi asli di layanan AI yang dipakai."></textarea>
+<label for="adegan">Ide cerita atau adegan</label><textarea id="adegan" placeholder="Contoh: berjalan di desa lalu membeli cilok"></textarea>
+<label for="dialog">Dialog</label><textarea id="dialog" placeholder="Tuliskan dialog Indonesia atau Jawa"></textarea>
+<label for="durasi">Durasi video</label><select id="durasi"><option>10 detik</option><option>20 detik</option><option>30 detik</option><option>60 detik</option></select>
+<label for="gaya">Gaya visual</label><select id="gaya"><option>Realistis sinematik</option><option>Realistis natural</option><option>Komedi natural</option><option>Drama film</option><option>Dokumenter</option><option>HD tajam</option></select>
+<label for="rasio">Format</label><select id="rasio"><option>Vertikal 9:16</option><option>Horizontal 16:9</option><option>Persegi 1:1</option></select>
+<div class="actions"><button onclick="buatPrompt()">Buat Prompt</button><button class="secondary" onclick="resetForm()">Reset Form</button></div>
+</div>
+<div class="card"><h3>Hasil Prompt</h3><textarea id="hasil" placeholder="Prompt akan muncul di sini..." readonly></textarea><div class="actions"><button onclick="salin()">Salin Prompt</button><button class="secondary" onclick="unduh()">Simpan sebagai TXT</button></div><p class="note">Aplikasi ini menyusun prompt secara lokal di perangkat. Untuk menghasilkan gambar atau video, salin prompt ke layanan AI yang sesuai. Aplikasi ini belum terhubung langsung ke generator AI.</p></div>
+</main><footer>AI UGC Content Master · Versi 1.0</footer>
+<script>
+const v=id=>document.getElementById(id).value.trim();
+function buatPrompt(){
+const jenis=v('jenis'),tokoh=v('tokoh')||'Karakter utama sesuai foto referensi',ref=v('referensi')||'Gunakan foto referensi asli sebagai sumber identitas',adegan=v('adegan')||'Buat adegan sesuai kebutuhan pengguna',dialog=v('dialog')||'Dialog natural sesuai konteks',durasi=v('durasi'),gaya=v('gaya'),rasio=v('rasio');
+let p=`JENIS KONTEN: ${jenis}\nKARAKTER: ${tokoh}\nCIRI REFERENSI: ${ref}\nADEGAN: ${adegan}\nGAYA VISUAL: ${gaya}\nFORMAT: ${rasio}\n\n`;
+if(jenis==='DNA Character')p+=`DNA CHARACTER SHEET — FULL BODY & 360° IDENTITY LOCK\nGunakan foto referensi yang diunggah sebagai sumber identitas utama. Pertahankan orang yang sama: bentuk wajah, mata, hidung, bibir, warna kulit, usia visual, rambut, proporsi tubuh, dan ciri khas. Buat lembar karakter yang menampilkan tampak depan, 3/4, samping, belakang, dan full body dengan identitas serta pakaian konsisten. Jangan mengganti wajah, jangan mencampur karakter, jangan mengubah warna kulit atau pakaian. Jika detail tidak terlihat di foto, jangan mengarang perubahan besar.\nNEGATIVE PROMPT: different person, face swap, identity drift, inconsistent clothes, inconsistent skin tone, distorted anatomy, extra fingers, duplicate person.`;
+else if(jenis==='Prompt Gambar'||jenis==='Edit Foto')p+=`Buat gambar ${rasio}, ${gaya}, detail tajam dan pencahayaan natural. Pertahankan identitas wajah dan tubuh sesuai foto referensi. Ubah hanya bagian yang diminta dalam deskripsi adegan. Anatomi realistis, tangan proporsional, tekstur kulit natural, tanpa distorsi.\nNEGATIVE PROMPT: wajah berbeda, identitas berubah, pakaian berubah tanpa diminta, tubuh cacat, jari berlebih, blur, teks acak, watermark.`;
+else if(jenis==='Prompt Video')p+=`PROMPT VIDEO ${durasi.toUpperCase()}\nBuat video ${rasio}. Susun satu aksi yang jelas dan berkesinambungan dari awal sampai akhir. Gerakan tubuh natural dan realistis, ekspresi tidak kaku, kamera sinematik yang stabil dan masuk akal. Jelaskan urutan waktu, blocking karakter, gerakan kamera, pencahayaan, ambience, dan audio. Jangan memotong aksi secara membingungkan.\nDIALOG PERSIS:\n${dialog}\nCONTINUITY LOCK: wajah, tubuh, rambut, warna kulit, pakaian, dan identitas karakter tetap sama di setiap frame dan scene. Jangan mengganti atau menggabungkan karakter.\nNEGATIVE PROMPT: identity drift, face morphing, outfit change, merged characters, unnatural movement, flicker, warped hands, extra limbs, random text, subtitles unless requested.`;
+else p+=`Kembangkan ${jenis} dengan alur pembuka, perkembangan, dan penutup yang jelas. Gunakan adegan yang diberikan, dengan dialog natural dan mudah diucapkan. Untuk cerita bersambung, pertahankan lokasi, waktu, karakter, wajah, pakaian, dan arah gerak antar-scene. Jika berupa video, tuliskan storyboard berurutan sesuai durasi ${durasi}, gerakan kamera, ekspresi, audio/ambience, serta transisi yang masuk akal.\nDIALOG:\n${dialog}\nCONTINUITY LOCK: jangan mengganti wajah, pakaian, atau identitas karakter. Jangan mencampur karakter. Hindari gerakan kaku seperti boneka dan hasil yang terlihat artifisial.\nNEGATIVE PROMPT: different face, inconsistent costume, merged characters, stiff acting, unnatural movement, distorted body, random text, unwanted subtitles.`;
+document.getElementById('hasil').value=p;
+}
+async function salin(){let el=document.getElementById('hasil');if(!el.value){alert('Buat prompt terlebih dahulu.');return}try{await navigator.clipboard.writeText(el.value);alert('Prompt berhasil disalin.')}catch(e){el.focus();el.select();alert('Teks sudah dipilih. Pilih Salin/Copy dari menu perangkat.')}} 
+function unduh(){let t=document.getElementById('hasil').value;if(!t){alert('Buat prompt terlebih dahulu.');return}let a=document.createElement('a');let u=URL.createObjectURL(new Blob([t],{type:'text/plain;charset=utf-8'}));a.href=u;a.download='prompt-ugc.txt';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}
+function resetForm(){['tokoh','referensi','adegan','dialog','hasil'].forEach(id=>document.getElementById(id).value='')}
+</script>
+</body></html>
